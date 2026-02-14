@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Mission Saint-Valentin ❤️</title>
+<style>
+body {
+    margin:0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(to bottom, #ffdde1, #ee9ca7);
+    overflow-x: hidden;
+    color: white;
+    text-align: center;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+@keyframes floatHearts {
+  0% {transform: translateY(0) scale(1);}
+  50% {transform: translateY(-20px) scale(1.1);}
+  100% {transform: translateY(0) scale(1);}
+}
+.heart {
+    position: absolute;
+    color: rgba(255,0,102,0.5);
+    font-size: 15px;
+    animation: floatHearts 3s infinite ease-in-out;
+}
+.container {
+    background: rgba(0,0,0,0.35);
+    padding: 30px 40px;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    max-width: 500px;
+    width: 90%;
+}
+button {
+    padding: 15px 35px;
+    font-size: 18px;
+    margin: 15px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+.yes { background: #ff4d6d; color: white; }
+.yes:hover { transform: scale(1.1); box-shadow: 0 8px 20px rgba(0,0,0,0.5);}
+.no { background: #a0a0a0; color: white; }
+.no:hover { transform: scale(1.1); }
+img {
+    max-width: 80%;
+    border-radius: 15px;
+    margin-top: 20px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+}
+input {
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+    width: 70%;
+    margin-top: 15px;
+}
+.hidden { display: none; }
+</style>
+</head>
+<body>
+
+<script>
+for(let i=0;i<200;i++){
+    let c = document.createElement('div');
+    c.className = 'heart';
+    c.style.left = Math.random()*100 + '%';
+    c.style.top = Math.random()*100 + '%';
+    c.style.fontSize = (10 + Math.random()*25) + 'px';
+    c.style.animationDuration = (2 + Math.random()*3) + 's';
+    c.style.opacity = Math.random();
+    c.innerText = '❤️';
+    document.body.appendChild(c);
+}
+</script>
+
+<!-- PAGE 1 : IDENTITÉ -->
+<div class="container" id="question1">
+<h1>Es-tu Léonie Chassigneux ?</h1>
+<button class="yes" onclick="nextQuestion1()">Oui</button>
+<button class="no" onclick="alert('Mauvaise réponse 😏')">Non</button>
+</div>
+
+<!-- PAGE 2 : PRÉPARATION -->
+<div class="container hidden" id="question2">
+<h1>Es-tu prête ?</h1>
+<button class="yes" onclick="startGame()">Oui</button>
+<button class="no" onclick="alert('Mauvaise réponse 😏')">Non</button>
+</div>
+
+<!-- PAGE DU JEU -->
+<div class="container hidden" id="game">
+<h2 id="missionTitle">Première énigme</h2>
+<img id="missionImage" src="photo1.jpg">
+<p id="missionText">
+Je suis l’endroit où l’on se retrouve fatigués...<br>
+Où les films commencent mais ne finissent pas toujours...<br>
+Cherche-moi là où nos soirées deviennent des souvenirs.
+</p>
+<input type="text" id="answer" placeholder="Ta réponse ici">
+<br>
+<button onclick="checkAnswer()">Valider</button>
+</div>
+
+<!-- PAGE TROPHÉE / MESSAGE "5 minutes" -->
+<div class="container hidden" id="rewardPage">
+<h2 id="rewardTitle">Très bien !</h2>
+<p>Tu as 5 minutes pour trouver ton cadeau. C’est parti !</p>
+<button class="yes" onclick="nextMission()">Passer à l’énigme suivante</button>
+</div>
+
+<script>
+let mission = 1;
+
+function nextQuestion1(){
+    document.getElementById("question1").classList.add("hidden");
+    document.getElementById("question2").classList.remove("hidden");
+}
+function startGame(){
+    document.getElementById("question2").classList.add("hidden");
+    document.getElementById("game").classList.remove("hidden");
+}
+
+function checkAnswer(){
+    let answer = document.getElementById("answer").value.toLowerCase();
+    let correct = false;
+
+    if(mission === 1 && answer.includes("canapé")) correct = true;
+    else if(mission === 2 && answer.includes("miroir")) correct = true;
+    else if(mission === 3 && answer.includes("cuisine")) correct = true;
+
+    if(correct){
+        document.getElementById("game").classList.add("hidden");
+        document.getElementById("rewardPage").classList.remove("hidden");
+    } else {
+        alert("Mauvaise réponse 😏 Réfléchis encore.");
+    }
+}
+
+function nextMission(){
+    document.getElementById("rewardPage").classList.add("hidden");
+    document.getElementById("game").classList.remove("hidden");
+    document.getElementById("answer").value = "";
+
+    if(mission === 1){
+        mission = 2;
+        document.getElementById("missionTitle").innerText = "Deuxième énigme";
+        document.getElementById("missionImage").src = "photo2.jpg";
+        document.getElementById("missionText").innerHTML = "Je reflète ce que tu es...<br>Cherche là où l’on se prépare avant de briller.";
+    } else if(mission === 2){
+        mission = 3;
+        document.getElementById("missionTitle").innerText = "Troisième énigme";
+        document.getElementById("missionImage").src = "photo3.jpg";
+        document.getElementById("missionText").innerHTML = "C’est ici que naissent les petits-déjeuners pressés...<br>Cherche là où la chaleur transforme tout.";
+    } else if(mission === 3){
+        showFinal();
+    }
+}
+
+function showFinal(){
+    document.getElementById("game").classList.add("hidden");
+    let final = document.createElement("div");
+    final.className = "container";
+    final.innerHTML = `
+        <h1>🎉 Félicitations 🎉</h1>
+        <p>Le vrai cadeau est juste derrière toi ❤️</p>
+        <p>Ce site a été fait spécialement pour toi. Merci le meilleur chéri du monde 😍</p>
+    `;
+    document.body.appendChild(final);
+}
+</script>
+</body>
+</html>
